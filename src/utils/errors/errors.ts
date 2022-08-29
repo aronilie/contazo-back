@@ -1,8 +1,8 @@
-import "../loadEnvironment";
+import "../../loadEnvironment";
 import Debug from "debug";
 import chalk from "chalk";
 import { NextFunction, Request, Response } from "express";
-import CustomError from "./CustomError";
+import CustomError from "../CustomError/CustomError";
 
 const debug = Debug("utils:errors");
 
