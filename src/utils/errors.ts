@@ -6,11 +6,11 @@ import CustomError from "./CustomError";
 
 const debug = Debug("utils:errors");
 
-const notFoundError = (req: Request, res: Response) => {
+export const notFoundError = (req: Request, res: Response) => {
   res.status(404).json({ error: "Oops! Page not found :(" });
 };
 
-export const middleweareGeneralError = (
+export const generalError = (
   error: CustomError,
   req: Request,
   res: Response,
@@ -24,5 +24,3 @@ export const middleweareGeneralError = (
 
   res.status(errorCode).json({ error: errorMessage });
 };
-
-export default notFoundError;
