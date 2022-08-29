@@ -1,0 +1,3 @@
+const absurdFunction = () => "Hello";
+
+absurdFunction();
