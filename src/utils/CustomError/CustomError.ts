@@ -1,4 +1,4 @@
-import { ErrorWithCode } from "../interfaces/ErrorWithCode";
+import { ErrorWithCode } from "../../interfaces/ErrorWithCode";
 
 class CustomError extends Error implements ErrorWithCode {
   code: string;

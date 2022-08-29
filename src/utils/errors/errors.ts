@@ -7,7 +7,8 @@ import CustomError from "../CustomError/CustomError";
 const debug = Debug("utils:errors");
 
 export const notFoundError = (req: Request, res: Response) => {
-  res.status(404).json({ error: "Oops! Page not found :(" });
+  res.statusCode = 404;
+  res.json({ error: "Oops! Page not found :(" });
 };
 
 export const generalError = (
@@ -22,5 +23,6 @@ export const generalError = (
 
   debug(chalk.bgRed.white(error.message));
 
-  res.status(errorCode).json({ error: errorMessage });
+  res.statusCode = errorCode;
+  res.json({ error: errorMessage });
 };
