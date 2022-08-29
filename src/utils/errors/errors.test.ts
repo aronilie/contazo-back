@@ -14,8 +14,8 @@ beforeEach(() => {
 });
 
 describe("Given notFoundError function", () => {
-  describe("When it is instantiated", () => {
-    test("Then it should give a response with the error message 'Oops! Page not found :('", async () => {
+  describe("When it is instantiated with the error message 'Oops! Page not found :('", () => {
+    test("Then it should give a response with the error message", async () => {
       const expectedResponse = {
         error: "Oops! Page not found :(",
       };
@@ -28,8 +28,8 @@ describe("Given notFoundError function", () => {
 });
 
 describe("Given generalError function", () => {
-  describe("When it is instantiated", () => {
-    test("Then it should give a response with the error message 'Oops! Page not found :('", async () => {
+  describe("When it is instantiated with an error message 'Something went wrong :('", () => {
+    test("Then it should give a response with the error message", async () => {
       const error: CustomError = {
         publicMessage: "Something went wrong :(",
         code: "",
@@ -49,6 +49,30 @@ describe("Given generalError function", () => {
       );
 
       expect(mockResponse.json).toBeCalledWith(expectedResponse);
+    });
+  });
+
+  describe("When it is instantiated with a statusCode null", () => {
+    test("Then it should give a response with the statusCode 500", async () => {
+      const error: CustomError = {
+        publicMessage: "",
+        code: "",
+        message: "",
+        name: "",
+        privateMessage: "",
+        statusCode: null,
+      };
+
+      const expectedResponse = 500;
+
+      generalError(
+        error,
+        mockRequest as Request,
+        mockResponse as Response,
+        nextFunction
+      );
+
+      expect(mockResponse.statusCode).toBe(expectedResponse);
     });
   });
 });
