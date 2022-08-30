@@ -74,5 +74,29 @@ describe("Given generalError function", () => {
 
       expect(mockResponse.statusCode).toBe(expectedResponse);
     });
+
+    describe("When it is instantiated with a publicMessage null", () => {
+      test("Then it should give a response with the public message 'Something went wrong :('", async () => {
+        const error: CustomError = {
+          publicMessage: null,
+          code: "",
+          message: "",
+          name: "",
+          privateMessage: "",
+          statusCode: 500,
+        };
+
+        const expectedResponse = { error: "Something went wrong :(" };
+
+        generalError(
+          error,
+          mockRequest as Request,
+          mockResponse as Response,
+          nextFunction
+        );
+
+        expect(mockResponse.json).toBeCalledWith(expectedResponse);
+      });
+    });
   });
 });
