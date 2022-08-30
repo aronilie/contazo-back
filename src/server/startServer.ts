@@ -1,3 +1,4 @@
+import "../loadEnvironment";
 import Debug from "debug";
 import chalk from "chalk";
 import app from "./index";
