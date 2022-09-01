@@ -32,3 +32,18 @@ describe("Given the POST endpoint /users/register", () => {
     });
   });
 });
+
+describe("Given the POST endpoint /users/login", () => {
+  describe("When it receives a request with phoneNumber '+65 782 22 45' and password 'admin'", () => {
+    test("Then it should response with status 200 and the token created", async () => {
+      const user = { phoneNumber: "+65 782 22 45", password: "admin" };
+      const expectedStatus = 200;
+
+      const response = await request(app)
+        .post("/users/login")
+        .send(user)
+        .expect(expectedStatus);
+      expect(response.statusCode).toEqual(expectedStatus);
+    });
+  });
+});
