@@ -121,7 +121,7 @@ describe("Given a loginUser function", () => {
       const error = new CustomError(
         403,
         "User not found on database",
-        "Invalid username or password"
+        "Invalid phone number or password"
       );
 
       expect(next).toHaveBeenCalledWith(error);
@@ -137,7 +137,7 @@ describe("Given a loginUser function", () => {
       const error = new CustomError(
         404,
         "Invalid password",
-        "Invalid user name or password"
+        "Invalid phone number or password"
       );
 
       expect(next).toHaveBeenCalledWith(error);
@@ -145,7 +145,7 @@ describe("Given a loginUser function", () => {
 
     test("If something went wrong in express validation, it should send a customError to the errors middleware", async () => {
       const mockBadLoginData = {
-        userName: "name",
+        phoneNumber: "phone number",
         password: "",
       };
 
@@ -153,7 +153,7 @@ describe("Given a loginUser function", () => {
       const error = new CustomError(
         404,
         "name: TypeError; message: Cannot read properties of undefined (reading '0')",
-        "erdf"
+        "error"
       );
       const badRequest = { body: mockBadLoginData } as Partial<Request>;
 

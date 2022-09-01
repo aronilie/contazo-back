@@ -37,7 +37,7 @@ export const loginUser = async (
   next: NextFunction
 ) => {
   interface LoginData {
-    userName: string;
+    phoneNumber: string;
     password: string;
   }
 
@@ -46,13 +46,13 @@ export const loginUser = async (
   const userError = new CustomError(
     403,
     "User not found on database",
-    "Invalid username or password"
+    "Invalid phone number or password"
   );
 
   let findUsers: UserData[];
 
   try {
-    findUsers = await User.find({ userName: userReceived.userName });
+    findUsers = await User.find({ phoneNumber: userReceived.phoneNumber });
 
     if (findUsers.length === 0) {
       next(userError);
@@ -62,7 +62,7 @@ export const loginUser = async (
     const finalError = new CustomError(
       403,
       `name: ${(error as Error).name}; message: ${(error as Error).message}`,
-      "Invalid username or password"
+      "Invalid phone number or password"
     );
     next(finalError);
   }
@@ -83,7 +83,7 @@ export const loginUser = async (
     const finalError = new CustomError(
       403,
       `name: ${(error as Error).name}; message: ${(error as Error).message}`,
-      "Invalid username or password"
+      "Invalid phone number or password"
     );
     next(finalError);
     return;

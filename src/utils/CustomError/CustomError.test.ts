@@ -2,10 +2,10 @@ import CustomError from "./CustomError";
 
 describe("Given a CustomError class", () => {
   const errorCode = 401;
-  const publicMessage = "Invalid username or password";
+  const publicMessage = "Invalid phone number or password";
   const privateMessage = "Invalid password";
 
-  describe("When it is instantiated with the message 'Invalid username or password'", () => {
+  describe("When it is instantiated with the message 'Invalid phone number or password'", () => {
     test("Then it should return an error object with that message", () => {
       const expectedError = new Error(publicMessage);
 
