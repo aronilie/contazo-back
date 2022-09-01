@@ -1,4 +1,5 @@
-import { hashCreator } from "./auth";
+import bcrypt from "bcryptjs";
+import { hashCompare, hashCreator } from "./auth";
 
 describe("Given a hashCreator function", () => {
   describe("When it is called with a string as an argument", () => {
@@ -17,5 +18,19 @@ describe("Given a hashCreator function", () => {
 
       expect(result.length > 10).toBe(true);
     });
+  });
+});
+
+describe("Given a hashCompare function", () => {
+  describe("When it is called with a text and a hash as arguments", () => {
+    const firstHash = "Contact";
+    const secondHash = "Contact";
+
+    bcrypt.compare = jest.fn().mockReturnValue("Contact");
+
+    const returnedValue = hashCompare(firstHash, secondHash);
+
+    expect(bcrypt.compare).toHaveBeenCalledWith(firstHash, secondHash);
+    expect(returnedValue).toBe("Contact");
   });
 });

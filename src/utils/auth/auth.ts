@@ -6,5 +6,5 @@ export const hashCreator = (text: string) => {
   return bcrypt.hash(text, salt);
 };
 
-export const hashCompare = (text: string, hash: string) =>
-  bcrypt.compare(text, hash);
+export const hashCompare = (firstHash: string, secondHash: string) =>
+  bcrypt.compare(firstHash, secondHash);
