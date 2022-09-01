@@ -1,5 +1,12 @@
 import bcrypt from "bcryptjs";
-import { hashCompare, hashCreator } from "./auth";
+import { JwtPayload } from "../../interfaces/JwTPayload";
+import { createToken, hashCompare, hashCreator } from "./auth";
+
+const mockSign = jest.fn().mockReturnValue("Contact");
+
+jest.mock("jsonwebtoken", () => ({
+  sign: (payload: JwtPayload) => mockSign(payload),
+}));
 
 describe("Given a hashCreator function", () => {
   describe("When it is called with a string as an argument", () => {
@@ -32,5 +39,21 @@ describe("Given a hashCompare function", () => {
 
     expect(bcrypt.compare).toHaveBeenCalledWith(firstHash, secondHash);
     expect(returnedValue).toBe("Contact");
+  });
+});
+
+describe("Given a createToken function", () => {
+  describe("When called with a payload as an argument", () => {
+    test("Then it should call jwt and return its returned value", () => {
+      const mockToken: JwtPayload = {
+        id: "1234",
+        phoneNumber: "+44 588 24 15 55",
+      };
+
+      const returnedValue = createToken(mockToken);
+
+      expect(mockSign).toHaveBeenCalledWith(mockToken);
+      expect(returnedValue).toBe("Contact");
+    });
   });
 });
