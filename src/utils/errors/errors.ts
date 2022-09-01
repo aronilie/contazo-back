@@ -2,6 +2,7 @@ import "../../loadEnvironment";
 import Debug from "debug";
 import chalk from "chalk";
 import { NextFunction, Request, Response } from "express";
+import { ValidationError } from "express-validation";
 import CustomError from "../CustomError/CustomError";
 
 const debug = Debug("utils:errors");
@@ -18,11 +19,23 @@ export const generalError = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
-  const errorCode = error.statusCode ?? 500;
-  const errorMessage = error.publicMessage ?? "Something went wrong :(";
+  let errorCode;
+  let errorMessage;
 
-  debug(chalk.bgRed.white(error.message));
+  if (error instanceof ValidationError) {
+    debug(chalk.red("Request validation errors: "));
+    error.details.body.forEach((errorInfo) => {
+      debug(chalk.red(errorInfo.message));
+    });
 
+    errorCode = error.statusCode;
+    errorMessage = "Wrong data";
+  } else {
+    errorCode = error.statusCode ?? 500;
+    errorMessage = error.publicMessage ?? "Something went wrong :(";
+
+    debug(chalk.bgRed.white(error.message));
+  }
   res.statusCode = errorCode;
   res.json({ error: errorMessage });
 };
