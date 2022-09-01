@@ -4,6 +4,7 @@ export interface UserData {
   id: string;
   name: string;
   surname: string;
+  email: string;
   phoneNumber: string;
   password: string;
 }
@@ -13,6 +14,9 @@ const userSchema = new Schema({
     type: String,
   },
   surname: {
+    type: String,
+  },
+  email: {
     type: String,
   },
   phoneNumber: {

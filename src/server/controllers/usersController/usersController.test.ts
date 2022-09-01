@@ -22,6 +22,7 @@ describe("Given a registerUser controller function", () => {
     const newUser: UserRegister = {
       name: "",
       surname: "",
+      email: "",
       phoneNumber: "",
       password: "",
     };
