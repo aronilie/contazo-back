@@ -33,6 +33,20 @@ describe("Given the POST endpoint /users/register", () => {
       await request(app).post(route).send(user).expect(expectedStatus);
     });
   });
+
+  describe("When it receives a request without password", () => {
+    test("Then it should response with status 400 and a message 'Wrong data'", async () => {
+      const message = "Wrong data";
+      const { body } = await request(app)
+        .post("/users/register")
+        .send({
+          phoneNumber: "",
+        })
+        .expect(400);
+
+      expect(body).toHaveProperty("error", message);
+    });
+  });
 });
 
 describe("Given the POST endpoint /users/login", () => {
@@ -45,6 +59,20 @@ describe("Given the POST endpoint /users/login", () => {
 
       await request(app).post("/users/register").send(user).expect(201);
       await request(app).post(route).send(userLogin).expect(expectedStatus);
+    });
+  });
+
+  describe("When it receives a request without password", () => {
+    test("Then it should response with status 400 and a message 'Wrong data'", async () => {
+      const message = "Wrong data";
+      const { body } = await request(app)
+        .post("/users/login")
+        .send({
+          phoneNumber: "",
+        })
+        .expect(400);
+
+      expect(body).toHaveProperty("error", message);
     });
   });
 });
