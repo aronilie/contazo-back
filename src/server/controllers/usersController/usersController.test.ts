@@ -2,7 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import User from "../../../database/models/User/User";
 import UserRegister from "../../../interfaces/UserRegister";
 import CustomError from "../../../utils/CustomError/CustomError";
-import registerUser from "./usersController";
+import registerUser, { loginUser } from "./usersController";
+
+let mockHashCompare = true;
+
+jest.mock("../../../utils/auth/auth", () => ({
+  ...jest.requireActual("../../../utils/auth/auth"),
+  hashCreate: () => jest.fn().mockReturnValue("#"),
+  hashCompare: () => mockHashCompare,
+  createToken: () => jest.fn().mockReturnValue("#"),
+}));
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe("Given a registerUser controller function", () => {
   describe("When it's invoked", () => {
@@ -17,7 +30,7 @@ describe("Given a registerUser controller function", () => {
 
     const req: Partial<Request> = { body: newUser };
 
-    test("Then it should call the status method with a 200", async () => {
+    test("Then it should call the status method with a 201", async () => {
       User.create = jest.fn().mockResolvedValue(newUser);
       const next: NextFunction = jest.fn();
       const res: Partial<Response> = {
@@ -55,6 +68,100 @@ describe("Given a registerUser controller function", () => {
       };
 
       await registerUser(req as Request, res as Response, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a loginUser function", () => {
+  describe("When called with a request, a response and a next function as arguments", () => {
+    const mockUser = {
+      _id: "123",
+      phoneNumber: "name",
+      password: "password",
+    };
+
+    const mockLoginData = {
+      phoneNumber: "name",
+      password: "password",
+    };
+    const req = {
+      body: mockLoginData,
+    } as Partial<Request>;
+
+    User.find = jest.fn().mockReturnValue([mockUser]);
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as Partial<Response>;
+
+    const next = jest.fn() as NextFunction;
+    test("It should call status with a code of 200", async () => {
+      const status = 200;
+
+      await loginUser(req as Request, res as Response, next);
+
+      expect(res.status).toHaveBeenCalledWith(status);
+    });
+
+    test("It should respond with a new user as a body", async () => {
+      User.find = jest.fn().mockReturnValue([mockUser]);
+
+      await loginUser(req as Request, res as Response, next);
+
+      expect(res.json).toHaveBeenCalled();
+    });
+
+    test("If find method finds no users it should return an empty array, and an error should be sent to the errors middleware", async () => {
+      User.find = jest.fn().mockReturnValue([]);
+
+      await loginUser(req as Request, res as Response, next);
+      const error = new CustomError(
+        403,
+        "User not found on database",
+        "Invalid username or password"
+      );
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    test("If password is not valid, it should send an error to the errors middleware", async () => {
+      User.find = jest.fn().mockReturnValue([mockUser]);
+
+      mockHashCompare = false;
+
+      await loginUser(req as Request, res as Response, next);
+
+      const error = new CustomError(
+        404,
+        "Invalid password",
+        "Invalid user name or password"
+      );
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    test("If something went wrong in express validation, it should send a customError to the errors middleware", async () => {
+      const mockBadLoginData = {
+        userName: "name",
+        password: "",
+      };
+
+      User.find = jest.fn().mockRejectedValue(new Error(""));
+      const error = new CustomError(
+        404,
+        "name: TypeError; message: Cannot read properties of undefined (reading '0')",
+        "erdf"
+      );
+      const badRequest = { body: mockBadLoginData } as Partial<Request>;
+
+      await loginUser(
+        badRequest as Request,
+        res as Response,
+        next as NextFunction
+      );
 
       expect(next).toHaveBeenCalledWith(error);
     });
