@@ -1,4 +1,4 @@
-import hashCreator from "./auth";
+import { hashCreator } from "./auth";
 
 describe("Given a hashCreator function", () => {
   describe("When it is called with a string as an argument", () => {

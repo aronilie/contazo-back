@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../../database/models/User/User";
-import hashCreator from "../../../utils/auth/auth";
+import { hashCreator } from "../../../utils/auth/auth";
 import CustomError from "../../../utils/CustomError/CustomError";
 import UserRegister from "../../../interfaces/UserRegister";
 
