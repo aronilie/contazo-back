@@ -1,55 +1,94 @@
 {
-  "info": {
-    "_postman_id": "ba45dff7-599b-47fc-bc8d-37d744cb8e0c",
-    "name": "Contazo",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "22264390"
-  },
-  "item": [
-    {
-      "name": "Register",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n\"phoneNumber\": \"asdfadf\",\n\"password\": \"VFaddf\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{local}}users/register",
-          "host": ["{{local}}users"],
-          "path": ["register"]
-        }
-      },
-      "response": []
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "local",
-      "value": "http://localhost:3100/",
-      "type": "string"
-    }
-  ]
+	"info": {
+		"_postman_id": "ba45dff7-599b-47fc-bc8d-37d744cb8e0c",
+		"name": "Contazo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22264390"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"name\": \"Dan\",\n\"surname\": \"Abramov\",\n\"email\": \"dan@contazo.com\",\n\"phoneNumber\": \"888555222\",\n\"password\": \"freesabana\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{production}}users/register",
+					"host": [
+						"{{production}}users"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"phoneNumber\": \"888555222\",\n    \"password\": \"freesabana\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{production}}users/login",
+					"host": [
+						"{{production}}users"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "http://localhost:3100/",
+			"type": "string"
+		},
+		{
+			"key": "production",
+			"value": "https://ailie-final-project-202207.herokuapp.com/",
+			"type": "string"
+		}
+	]
 }
