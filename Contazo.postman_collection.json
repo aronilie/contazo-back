@@ -13,7 +13,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n\"phoneNumber\": \"asdfadf\",\n\"password\": \"VFaddf\"\n}",
+          "raw": "{\n\"name\": \"Dan\",\n\"surname\": \"Abramov\",\n\"email\": \"dan@contazo.com\",\n\"phoneNumber\": \"888555222\",\n\"password\": \"freesabana\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -21,9 +21,31 @@
           }
         },
         "url": {
-          "raw": "{{local}}users/register",
-          "host": ["{{local}}users"],
+          "raw": "{{production}}users/register",
+          "host": ["{{production}}users"],
           "path": ["register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"phoneNumber\": \"888555222\",\n    \"password\": \"freesabana\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{production}}users/login",
+          "host": ["{{production}}users"],
+          "path": ["login"]
         }
       },
       "response": []
@@ -49,6 +71,11 @@
     {
       "key": "local",
       "value": "http://localhost:3100/",
+      "type": "string"
+    },
+    {
+      "key": "production",
+      "value": "https://ailie-final-project-202207.herokuapp.com/",
       "type": "string"
     }
   ]
