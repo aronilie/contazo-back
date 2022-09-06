@@ -20,11 +20,11 @@ afterEach(() => {
 describe("Given a registerUser controller function", () => {
   describe("When it's invoked", () => {
     const newUser: UserRegister = {
-      name: "",
-      surname: "",
-      email: "",
-      phoneNumber: "",
-      password: "",
+      name: "Dan",
+      surname: "Abramov",
+      email: "dan@test.com",
+      phoneNumber: "888555222",
+      password: "freesabana",
     };
 
     const status = 201;
@@ -44,22 +44,23 @@ describe("Given a registerUser controller function", () => {
       expect(res.status).toHaveBeenCalledWith(status);
     });
 
-    test("And it should call the method json with the newUser created", async () => {
+    test("And it should call the method json with the responseUser created", async () => {
+      const { phoneNumber } = newUser;
       User.create = jest.fn().mockResolvedValue(newUser);
 
       const next: NextFunction = jest.fn();
       const res: Partial<Response> = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn().mockResolvedValue({ user: newUser }),
+        json: jest.fn().mockResolvedValue({ user: { phoneNumber } }),
       };
 
       await registerUser(req as Request, res as Response, next);
 
-      expect(res.json).toHaveBeenCalledWith({ user: newUser });
+      expect(res.json).toHaveBeenCalledWith({ user: { phoneNumber } });
     });
 
     test("Then if it's rejected create method it should call the next function with a custom error", async () => {
-      const error = new CustomError(401, "", "Error creating new user");
+      const error = new CustomError(409, "Error creating the user", "");
       User.create = jest.fn().mockRejectedValue(error);
 
       const next: NextFunction = jest.fn();
@@ -120,8 +121,8 @@ describe("Given a loginUser function", () => {
 
       await loginUser(req as Request, res as Response, next);
       const error = new CustomError(
-        403,
-        "User not found on database",
+        401,
+        "Invalid phone number or password",
         "Invalid phone number or password"
       );
 
@@ -153,7 +154,7 @@ describe("Given a loginUser function", () => {
       User.find = jest.fn().mockRejectedValue(new Error(""));
       const error = new CustomError(
         404,
-        "name: TypeError; message: Cannot read properties of undefined (reading '0')",
+        "Invalid phone number or password",
         "error"
       );
       const badRequest = { body: mockBadLoginData } as Partial<Request>;
