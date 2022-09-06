@@ -19,13 +19,13 @@ const registerUser = async (
 
   try {
     const newUser = await User.create(userReceived);
-
-    res.status(201).json({ user: newUser });
+    const { phoneNumber } = newUser;
+    res.status(201).json({ user: { phoneNumber } });
   } catch (error) {
     const customError = new CustomError(
-      400,
-      error.message,
-      "Error creating the user"
+      409,
+      "Error creating the user",
+      error.message
     );
     next(customError);
   }
@@ -44,8 +44,8 @@ export const loginUser = async (
   const userReceived = req.body as LoginData;
 
   const userError = new CustomError(
-    403,
-    "User not found on database",
+    401,
+    "Invalid phone number or password",
     "Invalid phone number or password"
   );
 
@@ -60,9 +60,9 @@ export const loginUser = async (
     }
   } catch (error) {
     const finalError = new CustomError(
-      403,
-      `name: ${(error as Error).name}; message: ${(error as Error).message}`,
-      "Invalid phone number or password"
+      401,
+      "Invalid phone number or password",
+      `name: ${(error as Error).name}; message: ${(error as Error).message}`
     );
     next(finalError);
   }
@@ -81,9 +81,9 @@ export const loginUser = async (
     }
   } catch (error) {
     const finalError = new CustomError(
-      403,
-      `name: ${(error as Error).name}; message: ${(error as Error).message}`,
-      "Invalid phone number or password"
+      401,
+      "Invalid phone number or password",
+      `name: ${(error as Error).name}; message: ${(error as Error).message}`
     );
     next(finalError);
     return;
