@@ -28,6 +28,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  contacts: [{ type: Schema.Types.ObjectId, ref: "Contact" }],
 });
 
 const User = model("User", userSchema, "users");
