@@ -32,7 +32,7 @@ export const generalError = (
     errorMessage = "Wrong data";
   } else {
     errorCode = error.statusCode ?? 500;
-    errorMessage = error.publicMessage ?? "Something went wrong :(";
+    errorMessage = error.publicMessage ?? "Something went wrong";
 
     debug(chalk.bgRed.white(error.message));
   }

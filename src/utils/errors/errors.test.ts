@@ -31,7 +31,7 @@ describe("Given generalError function", () => {
   describe("When it is instantiated with an error message 'Something went wrong :('", () => {
     test("Then it should give a response with the error message", async () => {
       const error: CustomError = {
-        publicMessage: "Something went wrong :(",
+        publicMessage: "Something went wrong",
         code: "",
         message: "",
         name: "",
@@ -76,7 +76,7 @@ describe("Given generalError function", () => {
     });
 
     describe("When it is instantiated with a publicMessage null", () => {
-      test("Then it should give a response with the public message 'Something went wrong :('", async () => {
+      test("Then it should give a response with the public message 'Something went wrong'", async () => {
         const error: CustomError = {
           publicMessage: null,
           code: "",
@@ -86,7 +86,7 @@ describe("Given generalError function", () => {
           statusCode: 500,
         };
 
-        const expectedResponse = { error: "Something went wrong :(" };
+        const expectedResponse = { error: "Something went wrong" };
 
         generalError(
           error,
