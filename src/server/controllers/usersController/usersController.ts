@@ -7,7 +7,7 @@ import {
 } from "../../../utils/auth/auth";
 import CustomError from "../../../utils/CustomError/CustomError";
 import UserRegister from "../../../interfaces/UserRegister";
-import { JwtPayload } from "../../../interfaces/JwTPayload";
+import { JwtCustomPayload } from "../../../interfaces/JwTPayload";
 
 const registerUser = async (
   req: Request,
@@ -25,7 +25,7 @@ const registerUser = async (
     const customError = new CustomError(
       409,
       "Error creating the user",
-      error.message
+      `name: ${(error as Error).name}; message: ${(error as Error).message}`
     );
     next(customError);
   }
@@ -89,7 +89,7 @@ export const loginUser = async (
     return;
   }
 
-  const userPayload: JwtPayload = {
+  const userPayload: JwtCustomPayload = {
     id: findUsers[0].id,
     phoneNumber: findUsers[0].phoneNumber,
   };

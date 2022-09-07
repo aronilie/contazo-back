@@ -1,11 +1,12 @@
 import bcrypt from "bcryptjs";
-import { JwtPayload } from "../../interfaces/JwTPayload";
-import { createToken, hashCompare, hashCreator } from "./auth";
+import jwt from "jsonwebtoken";
+import { JwtCustomPayload } from "../../interfaces/JwTPayload";
+import { createToken, hashCompare, hashCreator, verifyToken } from "./auth";
 
 const mockSign = jest.fn().mockReturnValue("Contact");
 
 jest.mock("jsonwebtoken", () => ({
-  sign: (payload: JwtPayload) => mockSign(payload),
+  sign: (payload: JwtCustomPayload) => mockSign(payload),
 }));
 
 describe("Given a hashCreator function", () => {
@@ -45,7 +46,7 @@ describe("Given a hashCompare function", () => {
 describe("Given a createToken function", () => {
   describe("When called with a payload as an argument", () => {
     test("Then it should call jwt and return its returned value", () => {
-      const mockToken: JwtPayload = {
+      const mockToken: JwtCustomPayload = {
         id: "1234",
         phoneNumber: "+44 588 24 15 55",
       };
@@ -54,6 +55,33 @@ describe("Given a createToken function", () => {
 
       expect(mockSign).toHaveBeenCalledWith(mockToken);
       expect(returnedValue).toBe("Contact");
+    });
+  });
+});
+
+describe("Given a verifyToken function", () => {
+  describe("When it is called with a token and a secret", () => {
+    test("Then it should return 'false'", () => {
+      const expectedString = "error";
+      const mockedToken = "#";
+      jwt.verify = jest.fn().mockReturnValue(expectedString);
+
+      const resultToken = verifyToken(mockedToken);
+
+      expect(resultToken).toBe(expectedString);
+    });
+
+    test("Then it should return an object with id and phoneNumber", () => {
+      const expectedPayload: JwtCustomPayload = {
+        id: "0",
+        phoneNumber: "888555222",
+      };
+      const mockedToken = "#";
+      jwt.verify = jest.fn().mockReturnValue(expectedPayload);
+
+      const resultToken = verifyToken(mockedToken);
+
+      expect(resultToken).toStrictEqual(expectedPayload);
     });
   });
 });
