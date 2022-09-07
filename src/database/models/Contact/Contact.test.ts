@@ -1,4 +1,4 @@
-import Contact from "./Contact";
+import { ContactModel } from "./Contact";
 
 describe("Given a Contact model", () => {
   describe("When it is called", () => {
@@ -11,7 +11,7 @@ describe("Given a Contact model", () => {
         "image",
         "owner",
       ];
-      const keys = Object.keys(Contact.schema.paths);
+      const keys = Object.keys(ContactModel.schema.paths);
       const userAttributes = [
         keys[0],
         keys[1],

@@ -1,5 +1,15 @@
 import { model, Schema } from "mongoose";
 
+export interface Contact {
+  name: string;
+  surname: string;
+  email: string;
+  phoneNumber: string;
+  image: string;
+  owner: string;
+  id: string;
+}
+
 const contactSchema = new Schema({
   name: {
     type: String,
@@ -27,6 +37,4 @@ const contactSchema = new Schema({
   },
 });
 
-const Contact = model("Contact", contactSchema, "contacts");
-
-export default Contact;
+export const ContactModel = model("Contact", contactSchema, "contacts");
