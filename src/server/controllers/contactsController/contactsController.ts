@@ -12,7 +12,7 @@ const getContacts = async (
 
   try {
     const contacts = await ContactModel.find({
-      _id: id,
+      owner: id,
     }).populate("owner");
 
     res.status(200).json({ contacts });
