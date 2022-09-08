@@ -33,7 +33,6 @@ describe("Given a getContacts function", () => {
         email: "dan@test.com",
         phoneNumber: "888555222",
         owner: "63175d13ef184c29a92d2e67",
-        id: "63175d13ef184c29a92d2e67",
       };
 
       test("Then it should call the status method with a 200", async () => {
@@ -59,7 +58,6 @@ describe("Given a getContacts function", () => {
             email: "dan@test.com",
             phoneNumber: "888555222",
             owner: "63175d13ef184c29a92d2e67",
-            id: "63175d13ef184c29a92d2e67",
           },
         };
 
