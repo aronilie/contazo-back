@@ -4,7 +4,7 @@ import {
   CustomRequest,
   JwtCustomPayload,
 } from "../../../interfaces/JwTPayload";
-import getContacts from "./contactsController";
+import { getContacts } from "./contactsController";
 
 describe("Given a getContacts function", () => {
   afterEach(() => jest.clearAllMocks());
