@@ -5,7 +5,11 @@ import {
   JwtCustomPayload,
 } from "../../../interfaces/JwTPayload";
 import CustomError from "../../../utils/CustomError/CustomError";
-import { deleteContact, getContacts } from "./contactsController";
+import {
+  createContact,
+  deleteContact,
+  getContacts,
+} from "./contactsController";
 
 describe("Given a getContacts function", () => {
   afterEach(() => jest.clearAllMocks());
@@ -156,6 +160,69 @@ describe("Given a deleteContact function", () => {
       );
 
       expect(next).toHaveBeenCalledWith(customError);
+    });
+  });
+});
+
+describe("Given a createContact function", () => {
+  const contact = {
+    name: "Dan",
+    surname: "Abramov",
+    email: "dan@test.com",
+    phoneNumber: "888555222",
+  };
+
+  const req: Partial<Request> = {};
+  const res: Partial<Response> = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  };
+  const next: Partial<NextFunction> = jest.fn();
+
+  describe("When it receives a response and a contact", () => {
+    test("Then it should call status function with code 201", async () => {
+      const expectedStatus = 201;
+
+      ContactModel.create = jest.fn().mockResolvedValue(contact);
+      await createContact(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+
+    test("Then it should call the response method with the text 'Contact successfully created'", async () => {
+      ContactModel.create = jest.fn().mockResolvedValue(contact);
+      const expectedText = "Contact successfully created";
+
+      await createContact(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.json).toHaveBeenCalledWith(expectedText);
+    });
+  });
+
+  describe("When it receives a response and a wrong contact", () => {
+    test("Then it should call next function and show the message 'Error creating contact'", async () => {
+      const finalError = new CustomError(
+        400,
+        "Error creating contact",
+        "Error creating contact"
+      );
+
+      ContactModel.create = jest.fn().mockRejectedValue(finalError);
+      await createContact(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(finalError);
     });
   });
 });
