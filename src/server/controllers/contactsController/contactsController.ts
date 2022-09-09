@@ -1,5 +1,8 @@
 import { NextFunction, Response, Request } from "express";
-import { ContactModel } from "../../../database/models/Contact/Contact";
+import {
+  Contact,
+  ContactModel,
+} from "../../../database/models/Contact/Contact";
 import { CustomRequest } from "../../../interfaces/JwTPayload";
 import CustomError from "../../../utils/CustomError/CustomError";
 
@@ -38,11 +41,33 @@ export const deleteContact = async (
     await ContactModel.findByIdAndDelete(id);
 
     res.status(201).json("Contact successfully deleted");
-  } catch {
+  } catch (error) {
     const finalError = new CustomError(
       400,
       "Error deleting contact",
       "Error deleting contact"
+    );
+
+    next(finalError);
+  }
+};
+
+export const createContact = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const contact: Contact = req.body;
+
+  try {
+    await ContactModel.create(contact);
+
+    res.status(201).json("Contact successfully created");
+  } catch (error) {
+    const finalError = new CustomError(
+      400,
+      "Error creating contact",
+      "Error creating contact"
     );
 
     next(finalError);
