@@ -74,7 +74,7 @@ describe("Given the get method in route '/contacts'", () => {
   });
 
   describe("When it receives a request with method get and an ivalid user token", () => {
-    test("Then it should response with status 404 and an object with a property 'destinations'", async () => {
+    test("Then it should response with status 404 and an object with a property 'contacts'", async () => {
       const expectedStatus = 500;
       const message = "Something went wrong";
 

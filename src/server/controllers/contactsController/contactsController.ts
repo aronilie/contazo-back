@@ -3,7 +3,7 @@ import { ContactModel } from "../../../database/models/Contact/Contact";
 import { CustomRequest } from "../../../interfaces/JwTPayload";
 import CustomError from "../../../utils/CustomError/CustomError";
 
-const getContacts = async (
+export const getContacts = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction
@@ -19,12 +19,32 @@ const getContacts = async (
   } catch (error) {
     const finalError = new CustomError(
       400,
-      "The contacts couldn't been loaded successfully.",
-      "Error while getting the contacts."
+      "The contacts couldn't been loaded successfully",
+      "Error while getting the contacts"
     );
 
     next(finalError);
   }
 };
 
-export default getContacts;
+export const deleteContact = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.payload;
+
+  try {
+    await ContactModel.findByIdAndDelete(id);
+
+    res.status(201).json("Contact successfully deleted");
+  } catch {
+    const finalError = new CustomError(
+      400,
+      "Error deleting contact",
+      "Error deleting contact"
+    );
+
+    next(finalError);
+  }
+};
