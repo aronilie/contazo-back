@@ -4,7 +4,8 @@ import {
   CustomRequest,
   JwtCustomPayload,
 } from "../../../interfaces/JwTPayload";
-import { getContacts } from "./contactsController";
+import CustomError from "../../../utils/CustomError/CustomError";
+import { deleteContact, getContacts } from "./contactsController";
 
 describe("Given a getContacts function", () => {
   afterEach(() => jest.clearAllMocks());
@@ -100,6 +101,61 @@ describe("Given a getContacts function", () => {
 
         expect(next).toHaveBeenCalled();
       });
+    });
+  });
+});
+
+describe("Given a deleteContact function", () => {
+  const req: Partial<CustomRequest> = { payload: { id: "4444" } };
+  const res: Partial<Response> = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  };
+  const next: Partial<NextFunction> = jest.fn();
+
+  describe("When it receives a valid id", () => {
+    test("Then it should call status function with status code 201", async () => {
+      const expectedStatus = 201;
+      ContactModel.findByIdAndDelete = jest.fn();
+
+      await deleteContact(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+
+    test("Then it should call the json method with a next", async () => {
+      const text = "Contact successfully deleted";
+      ContactModel.findByIdAndDelete = jest.fn();
+
+      await deleteContact(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.json).toHaveBeenCalledWith(text);
+    });
+
+    test("Then it should call the next error with a custom error", async () => {
+      const customError = new CustomError(
+        400,
+        "Error deleting contact",
+        "Error deleting contact"
+      );
+
+      ContactModel.findByIdAndDelete = jest.fn().mockRejectedValue(customError);
+
+      await deleteContact(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(customError);
     });
   });
 });

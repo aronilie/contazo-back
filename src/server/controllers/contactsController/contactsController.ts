@@ -19,8 +19,8 @@ export const getContacts = async (
   } catch (error) {
     const finalError = new CustomError(
       400,
-      "The contacts couldn't been loaded successfully.",
-      "Error while getting the contacts."
+      "The contacts couldn't been loaded successfully",
+      "Error while getting the contacts"
     );
 
     next(finalError);
@@ -37,7 +37,7 @@ export const deleteContact = async (
   try {
     await ContactModel.findByIdAndDelete(id);
 
-    res.status(201).json("Contact successfully deleted.");
+    res.status(201).json("Contact successfully deleted");
   } catch {
     const finalError = new CustomError(
       400,
