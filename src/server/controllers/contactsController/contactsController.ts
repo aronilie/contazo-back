@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 import { ContactModel } from "../../../database/models/Contact/Contact";
 import { CustomRequest } from "../../../interfaces/JwTPayload";
 import CustomError from "../../../utils/CustomError/CustomError";
@@ -28,11 +28,11 @@ export const getContacts = async (
 };
 
 export const deleteContact = async (
-  req: CustomRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.payload;
+  const { id } = req.params;
 
   try {
     await ContactModel.findByIdAndDelete(id);

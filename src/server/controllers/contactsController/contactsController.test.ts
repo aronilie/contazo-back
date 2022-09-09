@@ -106,7 +106,7 @@ describe("Given a getContacts function", () => {
 });
 
 describe("Given a deleteContact function", () => {
-  const req: Partial<CustomRequest> = { payload: { id: "4444" } };
+  const req: Partial<Request> = { params: { id: "4444" } };
   const res: Partial<Response> = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn(),
@@ -119,7 +119,7 @@ describe("Given a deleteContact function", () => {
       ContactModel.findByIdAndDelete = jest.fn();
 
       await deleteContact(
-        req as CustomRequest,
+        req as Request,
         res as Response,
         next as NextFunction
       );
@@ -132,7 +132,7 @@ describe("Given a deleteContact function", () => {
       ContactModel.findByIdAndDelete = jest.fn();
 
       await deleteContact(
-        req as CustomRequest,
+        req as Request,
         res as Response,
         next as NextFunction
       );
@@ -150,7 +150,7 @@ describe("Given a deleteContact function", () => {
       ContactModel.findByIdAndDelete = jest.fn().mockRejectedValue(customError);
 
       await deleteContact(
-        req as CustomRequest,
+        req as Request,
         res as Response,
         next as NextFunction
       );
