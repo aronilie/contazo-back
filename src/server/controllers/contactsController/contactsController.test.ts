@@ -8,6 +8,7 @@ import CustomError from "../../../utils/CustomError/CustomError";
 import {
   createContact,
   deleteContact,
+  getContactByPhoneNumber,
   getContacts,
 } from "./contactsController";
 
@@ -223,6 +224,47 @@ describe("Given a createContact function", () => {
       );
 
       expect(next).toHaveBeenCalledWith(finalError);
+    });
+  });
+});
+
+describe("Given a getContactByPhoneNumber function", () => {
+  const req: Partial<Request> = { params: { id: "4444" } };
+  const res: Partial<Response> = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  };
+  const next: Partial<NextFunction> = jest.fn();
+  describe("When it is called with a valid id", () => {
+    test("Then it should call status function with status code 200", async () => {
+      const expectedStatus = 200;
+      ContactModel.findById = jest.fn();
+
+      await getContactByPhoneNumber(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+
+    test("Then it should call the next error with a custom error", async () => {
+      const customError = new CustomError(
+        400,
+        "Error loading contact",
+        "Error loading contact"
+      );
+
+      ContactModel.findById = jest.fn().mockRejectedValue(customError);
+
+      await getContactByPhoneNumber(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(customError);
     });
   });
 });
