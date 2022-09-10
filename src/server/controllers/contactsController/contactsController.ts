@@ -31,14 +31,18 @@ export const getContacts = async (
 };
 
 export const getContactByPhoneNumber = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const { phoneId } = req.params;
+  const { id } = req.payload;
 
   try {
-    const contact = await ContactModel.findById(id);
+    const contact = await ContactModel.findOne({
+      phoneNumber: phoneId,
+      owner: id,
+    });
 
     res.status(200).json(contact);
   } catch (error) {

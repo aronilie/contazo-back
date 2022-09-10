@@ -12,6 +12,14 @@ import {
   getContacts,
 } from "./contactsController";
 
+const mockUser = {
+  name: "Dan",
+  surname: "Abramov",
+  email: "dan@test.com",
+  phoneNumber: "888555222",
+  owner: "63175d13ef184c29a92d2e67",
+};
+
 describe("Given a getContacts function", () => {
   afterEach(() => jest.clearAllMocks());
 
@@ -33,14 +41,6 @@ describe("Given a getContacts function", () => {
     const next = jest.fn() as NextFunction;
 
     describe("And the user is on database", () => {
-      const mockUser = {
-        name: "Dan",
-        surname: "Abramov",
-        email: "dan@test.com",
-        phoneNumber: "888555222",
-        owner: "63175d13ef184c29a92d2e67",
-      };
-
       test("Then it should call the status method with a 200", async () => {
         const expectedStatus = 200;
 
@@ -229,19 +229,32 @@ describe("Given a createContact function", () => {
 });
 
 describe("Given a getContactByPhoneNumber function", () => {
-  const req: Partial<Request> = { params: { id: "4444" } };
-  const res: Partial<Response> = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn(),
-  };
-  const next: Partial<NextFunction> = jest.fn();
+  afterEach(() => jest.clearAllMocks());
+
   describe("When it is called with a valid id", () => {
+    const mockPayloadUser: JwtCustomPayload = {
+      id: "631a343b95e83e49b95f9646",
+      phoneNumber: "888555222",
+    };
+
+    const req = {
+      payload: mockPayloadUser,
+      params: { id: "888555222" },
+    } as Partial<Request>;
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as Partial<Response>;
+
+    const next = jest.fn() as NextFunction;
+
     test("Then it should call status function with status code 200", async () => {
       const expectedStatus = 200;
-      ContactModel.findById = jest.fn();
+      ContactModel.findOne = jest.fn().mockReturnThis();
 
       await getContactByPhoneNumber(
-        req as Request,
+        req as CustomRequest,
         res as Response,
         next as NextFunction
       );
@@ -256,10 +269,10 @@ describe("Given a getContactByPhoneNumber function", () => {
         "Error loading contact"
       );
 
-      ContactModel.findById = jest.fn().mockRejectedValue(customError);
+      ContactModel.findOne = jest.fn().mockRejectedValue(customError);
 
       await getContactByPhoneNumber(
-        req as Request,
+        req as CustomRequest,
         res as Response,
         next as NextFunction
       );
