@@ -3,12 +3,19 @@ import userAuthentication from "../../../utils/userAuthentication/userAuthentica
 import {
   createContact,
   deleteContact,
+  getContactByPhoneNumber,
   getContacts,
 } from "../../controllers/contactsController/contactsController";
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/contacts", userAuthentication, getContacts);
+
+contactsRouter.get(
+  "/contacts/:phoneId",
+  userAuthentication,
+  getContactByPhoneNumber
+);
 
 contactsRouter.delete("/delete/:id", userAuthentication, deleteContact);
 

@@ -8,8 +8,17 @@ import CustomError from "../../../utils/CustomError/CustomError";
 import {
   createContact,
   deleteContact,
+  getContactByPhoneNumber,
   getContacts,
 } from "./contactsController";
+
+const mockUser = {
+  name: "Dan",
+  surname: "Abramov",
+  email: "dan@test.com",
+  phoneNumber: "888555222",
+  owner: "63175d13ef184c29a92d2e67",
+};
 
 describe("Given a getContacts function", () => {
   afterEach(() => jest.clearAllMocks());
@@ -32,14 +41,6 @@ describe("Given a getContacts function", () => {
     const next = jest.fn() as NextFunction;
 
     describe("And the user is on database", () => {
-      const mockUser = {
-        name: "Dan",
-        surname: "Abramov",
-        email: "dan@test.com",
-        phoneNumber: "888555222",
-        owner: "63175d13ef184c29a92d2e67",
-      };
-
       test("Then it should call the status method with a 200", async () => {
         const expectedStatus = 200;
 
@@ -223,6 +224,60 @@ describe("Given a createContact function", () => {
       );
 
       expect(next).toHaveBeenCalledWith(finalError);
+    });
+  });
+});
+
+describe("Given a getContactByPhoneNumber function", () => {
+  afterEach(() => jest.clearAllMocks());
+
+  describe("When it is called with a valid id", () => {
+    const mockPayloadUser: JwtCustomPayload = {
+      id: "631a343b95e83e49b95f9646",
+      phoneNumber: "888555222",
+    };
+
+    const req = {
+      payload: mockPayloadUser,
+      params: { id: "888555222" },
+    } as Partial<Request>;
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as Partial<Response>;
+
+    const next = jest.fn() as NextFunction;
+
+    test("Then it should call status function with status code 200", async () => {
+      const expectedStatus = 200;
+      ContactModel.findOne = jest.fn().mockReturnThis();
+
+      await getContactByPhoneNumber(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+
+    test("Then it should call the next error with a custom error", async () => {
+      const customError = new CustomError(
+        400,
+        "Error loading contact",
+        "Error loading contact"
+      );
+
+      ContactModel.findOne = jest.fn().mockRejectedValue(customError);
+
+      await getContactByPhoneNumber(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(customError);
     });
   });
 });
