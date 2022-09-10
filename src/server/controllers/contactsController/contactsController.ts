@@ -30,6 +30,28 @@ export const getContacts = async (
   }
 };
 
+export const getContactByPhoneNumber = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    const contact = await ContactModel.findById(id);
+
+    res.status(200).json(contact);
+  } catch (error) {
+    const finalError = new CustomError(
+      400,
+      "Error loading contact",
+      "Error loading contact"
+    );
+
+    next(finalError);
+  }
+};
+
 export const deleteContact = async (
   req: Request,
   res: Response,
