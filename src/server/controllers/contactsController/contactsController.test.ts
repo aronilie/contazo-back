@@ -111,17 +111,29 @@ describe("Given a getContacts function", () => {
 });
 
 describe("Given a deleteContact function", () => {
-  const req: Partial<Request> = { params: { id: "4444" } };
+  afterEach(() => jest.clearAllMocks());
+
+  const mockPayloadUser: JwtCustomPayload = {
+    id: "631a343b95e83e49b95f9646",
+    phoneNumber: "888555222",
+  };
+
+  const req = {
+    payload: mockPayloadUser,
+    params: { id: "888555222" },
+  } as Partial<Request>;
+
   const res: Partial<Response> = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn(),
   };
+
   const next: Partial<NextFunction> = jest.fn();
 
   describe("When it receives a valid id", () => {
     test("Then it should call status function with status code 201", async () => {
       const expectedStatus = 201;
-      ContactModel.findByIdAndDelete = jest.fn();
+      ContactModel.findOneAndDelete = jest.fn();
 
       await deleteContact(
         req as Request,
@@ -134,7 +146,7 @@ describe("Given a deleteContact function", () => {
 
     test("Then it should call the json method with a next", async () => {
       const text = "Contact successfully deleted";
-      ContactModel.findByIdAndDelete = jest.fn();
+      ContactModel.findOneAndDelete = jest.fn();
 
       await deleteContact(
         req as Request,
@@ -152,7 +164,7 @@ describe("Given a deleteContact function", () => {
         "Error deleting contact"
       );
 
-      ContactModel.findByIdAndDelete = jest.fn().mockRejectedValue(customError);
+      ContactModel.findOneAndDelete = jest.fn().mockRejectedValue(customError);
 
       await deleteContact(
         req as Request,
