@@ -17,7 +17,7 @@ contactsRouter.get(
   getContactByPhoneNumber
 );
 
-contactsRouter.delete("/delete/:id", userAuthentication, deleteContact);
+contactsRouter.delete("/delete/:phoneId", userAuthentication, deleteContact);
 
 contactsRouter.post("/create", userAuthentication, createContact);
 

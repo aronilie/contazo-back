@@ -62,9 +62,13 @@ export const deleteContact = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { phoneId } = req.params;
 
   try {
-    await ContactModel.findByIdAndDelete(id);
+    await ContactModel.findOneAndDelete({
+      phoneNumber: phoneId,
+      owner: id,
+    });
 
     res.status(201).json("Contact successfully deleted");
   } catch (error) {
