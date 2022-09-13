@@ -31,6 +31,10 @@ const contactSchema = new Schema({
     type: String,
     required: false,
   },
+  backupImage: {
+    type: String,
+    required: false,
+  },
   owner: {
     type: Schema.Types.ObjectId,
     ref: "User",

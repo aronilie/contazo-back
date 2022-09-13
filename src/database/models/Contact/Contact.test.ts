@@ -9,6 +9,7 @@ describe("Given a Contact model", () => {
         "email",
         "phoneNumber",
         "image",
+        "backupImage",
         "owner",
       ];
       const keys = Object.keys(ContactModel.schema.paths);
@@ -19,6 +20,7 @@ describe("Given a Contact model", () => {
         keys[3],
         keys[4],
         keys[5],
+        keys[6],
       ];
       expect(userAttributes).toStrictEqual(expectedKeys);
     });
