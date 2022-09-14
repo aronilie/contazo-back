@@ -24,7 +24,7 @@ jest.mock("fs/promises", () => ({
   readFile: jest.fn().mockResolvedValue(""),
 }));
 
-const req = {
+let req = {
   body: {},
   file: { originalname: "test-name", filename: "filedname-test" },
 } as Partial<Request>;
@@ -48,6 +48,22 @@ describe("Given a middleware fileStorage", () => {
             message: "Error",
           },
         };
+
+        await fileStorage(
+          req as Request,
+          res as Response,
+          next as NextFunction
+        );
+
+        await expect(next).toHaveBeenCalled();
+      });
+    });
+
+    describe("When it receives a request without the 'file' property", () => {
+      test("Then it should call the next function", async () => {
+        req = {
+          body: {},
+        } as Partial<Request>;
 
         await fileStorage(
           req as Request,
