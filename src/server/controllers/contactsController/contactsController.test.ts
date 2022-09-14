@@ -136,7 +136,7 @@ describe("Given a deleteContact function", () => {
       ContactModel.findOneAndDelete = jest.fn();
 
       await deleteContact(
-        req as Request,
+        req as CustomRequest,
         res as Response,
         next as NextFunction
       );
@@ -149,7 +149,7 @@ describe("Given a deleteContact function", () => {
       ContactModel.findOneAndDelete = jest.fn();
 
       await deleteContact(
-        req as Request,
+        req as CustomRequest,
         res as Response,
         next as NextFunction
       );
@@ -167,7 +167,7 @@ describe("Given a deleteContact function", () => {
       ContactModel.findOneAndDelete = jest.fn().mockRejectedValue(customError);
 
       await deleteContact(
-        req as Request,
+        req as CustomRequest,
         res as Response,
         next as NextFunction
       );

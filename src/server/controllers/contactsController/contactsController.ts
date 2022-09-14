@@ -57,11 +57,11 @@ export const getContactByPhoneNumber = async (
 };
 
 export const deleteContact = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const { id } = req.payload;
   const { phoneId } = req.params;
 
   try {
