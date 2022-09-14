@@ -12,6 +12,11 @@ const debug = Debug("mahlzeit:server:middlewares:fileStorage");
 const supabase = createClient(backupConectionData.url, backupConectionData.key);
 
 const fileStorage = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req?.file) {
+    next();
+    return;
+  }
+
   const newFileName = `${Date.now()}-${req.file.originalname
     .split(" ")
     .join("-")}`;
