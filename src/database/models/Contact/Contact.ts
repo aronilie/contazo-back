@@ -29,11 +29,12 @@ const contactSchema = new Schema({
   },
   image: {
     type: String,
-    required: false,
+    default: "public/contact.png",
   },
   backupImage: {
     type: String,
-    required: false,
+    default:
+      "https://sastdxyrrgemxsyrrbrd.supabase.co/storage/v1/object/public/contazo-images/public/contact.png",
   },
   owner: {
     type: Schema.Types.ObjectId,
