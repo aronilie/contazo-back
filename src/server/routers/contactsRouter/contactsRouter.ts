@@ -7,6 +7,7 @@ import {
   deleteContact,
   getContactByPhoneNumber,
   getContacts,
+  updateContact,
 } from "../../controllers/contactsController/contactsController";
 import fileStorage from "../../middleweares/filesStorage";
 
@@ -36,5 +37,13 @@ contactsRouter.get(
 );
 
 contactsRouter.delete("/delete/:phoneId", userAuthentication, deleteContact);
+
+contactsRouter.post(
+  "/update/:phoneId",
+  upload.single("file"),
+  fileStorage,
+  userAuthentication,
+  updateContact
+);
 
 export default contactsRouter;
