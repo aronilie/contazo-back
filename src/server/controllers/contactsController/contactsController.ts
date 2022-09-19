@@ -103,3 +103,33 @@ export const createContact = async (
     next(finalError);
   }
 };
+
+export const updateContact = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.payload;
+  const { phoneId } = req.params;
+  const contact: Contact = req.body;
+
+  try {
+    await ContactModel.findOneAndUpdate(
+      {
+        phoneNumber: phoneId,
+        owner: id,
+      },
+      contact
+    );
+
+    res.status(201).json("Contact successfully updated");
+  } catch (error) {
+    const finalError = new CustomError(
+      400,
+      "Error updating contact",
+      "Error updating contact"
+    );
+
+    next(finalError);
+  }
+};

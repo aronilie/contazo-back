@@ -10,6 +10,7 @@ import {
   deleteContact,
   getContactByPhoneNumber,
   getContacts,
+  updateContact,
 } from "./contactsController";
 
 const mockUser = {
@@ -192,7 +193,7 @@ describe("Given a createContact function", () => {
   };
   const next: Partial<NextFunction> = jest.fn();
 
-  describe("When it receives a response and a contact", () => {
+  describe("When it receives a request and a contact", () => {
     test("Then it should call status function with code 201", async () => {
       const expectedStatus = 201;
 
@@ -290,6 +291,81 @@ describe("Given a getContactByPhoneNumber function", () => {
       );
 
       expect(next).toHaveBeenCalledWith(customError);
+    });
+  });
+});
+
+describe("Given a updateContact function", () => {
+  afterEach(() => jest.clearAllMocks());
+
+  const newContact = {
+    name: "Dan",
+    surname: "Abramov",
+    email: "dan@test.com",
+    phoneNumber: "888555222",
+  };
+
+  const mockPayloadUser: JwtCustomPayload = {
+    id: "631a343b95e83e49b95f9646",
+    phoneNumber: "888555222",
+  };
+
+  const req = {
+    payload: mockPayloadUser,
+    params: { id: "888555222" },
+  } as Partial<Request>;
+
+  const res = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  } as Partial<Response>;
+
+  const next: Partial<NextFunction> = jest.fn();
+
+  describe("When it receives a request and a new contact to update", () => {
+    test("Then it should call the status function with code 201", async () => {
+      const expectedStatus = 201;
+
+      ContactModel.findOneAndUpdate = jest.fn().mockResolvedValue(newContact);
+      await updateContact(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+    });
+
+    test("Then it should call the response method with the next message 'Contact successfully updated'", async () => {
+      ContactModel.findOneAndUpdate = jest.fn().mockResolvedValue(newContact);
+      const expectedText = "Contact successfully updated";
+
+      await updateContact(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.json).toHaveBeenCalledWith(expectedText);
+    });
+  });
+
+  describe("When it receives a request and a wrong contact", () => {
+    test("Then it should call the next function and show the message 'Error updating contact'", async () => {
+      const finalError = new CustomError(
+        400,
+        "Error updating contact",
+        "Error updating contact"
+      );
+
+      ContactModel.findOneAndUpdate = jest.fn().mockRejectedValue(finalError);
+      await updateContact(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(finalError);
     });
   });
 });
